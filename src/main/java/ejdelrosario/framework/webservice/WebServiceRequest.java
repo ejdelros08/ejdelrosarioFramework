@@ -9,6 +9,7 @@ package ejdelrosario.framework.webservice;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.net.SocketTimeoutException;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 
@@ -103,27 +104,33 @@ public class WebServiceRequest extends AsyncTask<Void, Void, Void>{
 					} catch (UnsupportedEncodingException e) {
 						// TODO Auto-generated catch block
 						catcher = e;
-						exceptionMessage = "Connetion Error";
+						exceptionMessage = "Connection Error";
 						e.printStackTrace();
 					} catch (ClientProtocolException e) {
 						// TODO Auto-generated catch block
-						exceptionMessage = "Connetion Error";
+						exceptionMessage = "Connection Error";
 						catcher = e;
 						e.printStackTrace();
 					} catch (UnknownHostException e){
-						exceptionMessage = "Connetion Error";
+						exceptionMessage = "Connection Error";
 						catcher = e;
 						e.printStackTrace();
 					} catch(ConnectTimeoutException e){
-						exceptionMessage = "Connetion Timeout";
+						exceptionMessage = "Connection Timeout";
+						catcher = e;
+						e.printStackTrace();
+					} catch (SocketTimeoutException e){
+						exceptionMessage = "Connection Timeout";
 						catcher = e;
 						e.printStackTrace();
 					} catch (IOException e) {
 						// TODO Auto-generated catch block
-						exceptionMessage = "Connetion Error";
+						exceptionMessage = "Connection Error";
 						catcher = e;
 						e.printStackTrace();
 					}
+
+
 					
 					break;
 				}
@@ -139,24 +146,28 @@ public class WebServiceRequest extends AsyncTask<Void, Void, Void>{
 					} catch (UnsupportedEncodingException e) {
 						// TODO Auto-generated catch block
 						catcher = e;
-						exceptionMessage = "Connetion Error";
+						exceptionMessage = "Connection Error";
 						e.printStackTrace();
 					} catch (ClientProtocolException e) {
 						// TODO Auto-generated catch block
-						exceptionMessage = "Connetion Error";
+						exceptionMessage = "Connection Error";
 						catcher = e;
 						e.printStackTrace();
 					} catch (UnknownHostException e){
-						exceptionMessage = "Connetion Error";
+						exceptionMessage = "Connection Error";
 						catcher = e;
 						e.printStackTrace();
 					} catch(ConnectTimeoutException e){
-						exceptionMessage = "Connetion Timeout";
+						exceptionMessage = "Connection Timeout";
+						catcher = e;
+						e.printStackTrace();
+					} catch (SocketTimeoutException e){
+						exceptionMessage = "Connection Timeout";
 						catcher = e;
 						e.printStackTrace();
 					} catch (IOException e) {
 						// TODO Auto-generated catch block
-						exceptionMessage = "Connetion Error";
+						exceptionMessage = "Connection Error";
 						catcher = e;
 						e.printStackTrace();
 					}
