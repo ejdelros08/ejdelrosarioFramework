@@ -20,7 +20,20 @@ public class DialogUtil {
 	 * @param message for the alert dialog
 	 */
 	public static void showAlertDialog(Context context, String message){
+		showAlertDialog(context, null, message);
+	}
+
+	/**
+	 * creates and shows a non-cancellable alert dialog
+	 * @param context
+	 * @param title for the alert dialog
+	 * @param message for the alert dialog
+	 */
+	public static void showAlertDialog(Context context, String title, String message){
 		AlertDialog.Builder msgbox = new AlertDialog.Builder(context);
+		if(title != null) {
+			msgbox.setTitle(title);
+		}
 		msgbox.setMessage(message);
 		msgbox.setPositiveButton("Ok", null);
 		msgbox.setCancelable(false);
@@ -34,7 +47,21 @@ public class DialogUtil {
 	 * @param listener when the dialog is dismissed
 	 */
 	public static void showAlertDialog(Context context, String message, DialogInterface.OnDismissListener listener){
+		showAlertDialog(context, null, message, listener);
+	}
+
+	/**
+	 * creates and shows a non-cancellable alert dialog
+	 * @param context
+	 * @param title for the alert dialog; pass null to hide title
+	 * @param message for the alert dialog
+	 * @param listener when the dialog is dismissed
+	 */
+	public static void showAlertDialog(Context context, String title, String message, DialogInterface.OnDismissListener listener){
 		AlertDialog.Builder msgbox = new AlertDialog.Builder(context);
+		if(title != null) {
+			msgbox.setTitle(title);
+		}
 		msgbox.setMessage(message);
 		msgbox.setPositiveButton("Ok", null);
 		msgbox.setCancelable(false);
@@ -53,7 +80,23 @@ public class DialogUtil {
 	 * @param listener for the buttons
 	 */
 	public static void showConfirmationDialog(Context context, String message, String buttonPositive, String buttonNegative, DialogInterface.OnClickListener listener){
+		showConfirmationDialog(context, null, message, buttonNegative, buttonNegative, listener);
+	}
+
+	/**
+	 * creates and shows a non-cancellable confirmation dialog
+	 * @param context
+	 * @param title for the alert dialog
+	 * @param message for the alert dialog
+	 * @param buttonPositive positive button text
+	 * @param buttonNegative negative button text
+	 * @param listener for the buttons
+	 */
+	public static void showConfirmationDialog(Context context, String title, String message, String buttonPositive, String buttonNegative, DialogInterface.OnClickListener listener){
 		AlertDialog.Builder msgbox = new AlertDialog.Builder(context);
+		if(title != null) {
+			msgbox.setTitle(title);
+		}
 		msgbox.setMessage(message);
 		msgbox.setPositiveButton(buttonPositive, listener);
 		msgbox.setNegativeButton(buttonNegative, listener);

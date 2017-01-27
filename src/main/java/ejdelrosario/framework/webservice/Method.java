@@ -9,5 +9,7 @@ package ejdelrosario.framework.webservice;
 
 public enum Method {
 	GET,
-	POST
+	POST,
+	PUT,
+	DELETE
 }

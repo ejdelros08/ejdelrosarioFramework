@@ -19,8 +19,10 @@ import org.apache.http.NameValuePair;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.HttpDelete;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.client.methods.HttpPut;
 import org.apache.http.client.utils.URLEncodedUtils;
 import org.apache.http.conn.ConnectTimeoutException;
 import org.apache.http.impl.client.DefaultHttpClient;
@@ -69,7 +71,6 @@ public class WebServiceRequest extends AsyncTask<Void, Void, Void>{
 	
 	@Override
 	protected void onPreExecute() {
-		// TODO Auto-generated method stub
 		if(getProgressDialog() != null){
 			getProgressDialog().show();
 		}
@@ -79,7 +80,6 @@ public class WebServiceRequest extends AsyncTask<Void, Void, Void>{
 	
 	@Override
 	protected Void doInBackground(Void... params) {
-		// TODO Auto-generated method stub
 		if(WebServiceHelper.isNetworkAvailable(context)){
 			
 			HttpParams httpParams = new BasicHttpParams();
@@ -102,12 +102,10 @@ public class WebServiceRequest extends AsyncTask<Void, Void, Void>{
 						HttpEntity entity = resp.getEntity();
 						responseString = EntityUtils.toString(entity);
 					} catch (UnsupportedEncodingException e) {
-						// TODO Auto-generated catch block
 						catcher = e;
 						exceptionMessage = "Connection Error";
 						e.printStackTrace();
 					} catch (ClientProtocolException e) {
-						// TODO Auto-generated catch block
 						exceptionMessage = "Connection Error";
 						catcher = e;
 						e.printStackTrace();
@@ -124,7 +122,6 @@ public class WebServiceRequest extends AsyncTask<Void, Void, Void>{
 						catcher = e;
 						e.printStackTrace();
 					} catch (IOException e) {
-						// TODO Auto-generated catch block
 						exceptionMessage = "Connection Error";
 						catcher = e;
 						e.printStackTrace();
@@ -144,12 +141,10 @@ public class WebServiceRequest extends AsyncTask<Void, Void, Void>{
 						HttpEntity entity = resp.getEntity();
 						responseString = EntityUtils.toString(entity);
 					} catch (UnsupportedEncodingException e) {
-						// TODO Auto-generated catch block
 						catcher = e;
 						exceptionMessage = "Connection Error";
 						e.printStackTrace();
 					} catch (ClientProtocolException e) {
-						// TODO Auto-generated catch block
 						exceptionMessage = "Connection Error";
 						catcher = e;
 						e.printStackTrace();
@@ -166,7 +161,80 @@ public class WebServiceRequest extends AsyncTask<Void, Void, Void>{
 						catcher = e;
 						e.printStackTrace();
 					} catch (IOException e) {
-						// TODO Auto-generated catch block
+						exceptionMessage = "Connection Error";
+						catcher = e;
+						e.printStackTrace();
+					}
+					break;
+				}
+				case PUT:{
+					HttpPut httpPut = new HttpPut(getURL());
+
+					try {
+						httpPut.setEntity(new UrlEncodedFormEntity(getParams(), "UTF-8"));
+						HttpResponse resp = httpClient.execute(httpPut);
+						HttpEntity entity = resp.getEntity();
+						responseString = EntityUtils.toString(entity);
+					} catch (UnsupportedEncodingException e) {
+						catcher = e;
+						exceptionMessage = "Connection Error";
+						e.printStackTrace();
+					} catch (ClientProtocolException e) {
+						exceptionMessage = "Connection Error";
+						catcher = e;
+						e.printStackTrace();
+					} catch (UnknownHostException e){
+						exceptionMessage = "Connection Error";
+						catcher = e;
+						e.printStackTrace();
+					} catch(ConnectTimeoutException e){
+						exceptionMessage = "Connection Timeout";
+						catcher = e;
+						e.printStackTrace();
+					} catch (SocketTimeoutException e){
+						exceptionMessage = "Connection Timeout";
+						catcher = e;
+						e.printStackTrace();
+					} catch (IOException e) {
+						exceptionMessage = "Connection Error";
+						catcher = e;
+						e.printStackTrace();
+					}
+					break;
+				}
+				case DELETE:{
+
+					String url = getURL();
+					if(parameters.size() > 0){
+						url = url + "?" + URLEncodedUtils.format(parameters, "UTF-8");
+					}
+					HttpDelete httpDelete = new HttpDelete(url);
+
+					try {
+						HttpResponse resp = httpClient.execute(httpDelete);
+						HttpEntity entity = resp.getEntity();
+						responseString = EntityUtils.toString(entity);
+					} catch (UnsupportedEncodingException e) {
+						catcher = e;
+						exceptionMessage = "Connection Error";
+						e.printStackTrace();
+					} catch (ClientProtocolException e) {
+						exceptionMessage = "Connection Error";
+						catcher = e;
+						e.printStackTrace();
+					} catch (UnknownHostException e){
+						exceptionMessage = "Connection Error";
+						catcher = e;
+						e.printStackTrace();
+					} catch(ConnectTimeoutException e){
+						exceptionMessage = "Connection Timeout";
+						catcher = e;
+						e.printStackTrace();
+					} catch (SocketTimeoutException e){
+						exceptionMessage = "Connection Timeout";
+						catcher = e;
+						e.printStackTrace();
+					} catch (IOException e) {
 						exceptionMessage = "Connection Error";
 						catcher = e;
 						e.printStackTrace();
@@ -180,7 +248,6 @@ public class WebServiceRequest extends AsyncTask<Void, Void, Void>{
 	
 	@Override
 	protected void onPostExecute(Void result) {
-		// TODO Auto-generated method stub
 		if(getProgressDialog() != null){
 			if(getProgressDialog().isShowing()){
 				getProgressDialog().dismiss();

@@ -6,11 +6,9 @@
  */
 package ejdelrosario.framework.webservice;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.net.UnknownHostException;
-import java.util.ArrayList;
+import android.app.ProgressDialog;
+import android.content.Context;
+import android.os.AsyncTask;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -23,14 +21,17 @@ import org.apache.http.entity.mime.content.StringBody;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.util.EntityUtils;
 
-import android.app.ProgressDialog;
-import android.content.Context;
-import android.os.AsyncTask;
-import android.os.Handler;
+import java.io.File;
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.UnknownHostException;
+import java.util.ArrayList;
+
 import ejdelrosario.framework.handler.UploadFileParamHandler;
 import ejdelrosario.framework.handler.UploadStringParamHandler;
 import ejdelrosario.framework.interfaces.WebServiceInterface.onExceptionListener;
 import ejdelrosario.framework.interfaces.WebServiceInterface.onNetworkExceptionListener;
+import ejdelrosario.framework.interfaces.WebServiceInterface.onProgressUpdateListener;
 import ejdelrosario.framework.interfaces.WebServiceInterface.onResponseListener;
 import ejdelrosario.framework.webservice.MultiPartEntity.ProgressListener;
 
@@ -54,6 +55,8 @@ public class WebServiceUpload extends AsyncTask<Void, Integer, Void>{
 	private onNetworkExceptionListener mNetworkListener;
 	
 	private onExceptionListener mExceptionListener;
+
+	private onProgressUpdateListener mProgressListener;
 	
 	private Exception catcher;
 	private String exceptionMessage = "";
@@ -68,7 +71,6 @@ public class WebServiceUpload extends AsyncTask<Void, Integer, Void>{
 	
 	@Override
 	protected void onPreExecute() {
-		// TODO Auto-generated method stub
 		if(getProgressDialog() != null){
 			getProgressDialog().show();
 		}
@@ -79,7 +81,6 @@ public class WebServiceUpload extends AsyncTask<Void, Integer, Void>{
 	
 	@Override
 	protected Void doInBackground(Void... params) {
-		// TODO Auto-generated method stub
 		if(WebServiceHelper.isNetworkAvailable(context)){
 			
 			httpClient = new DefaultHttpClient();
@@ -89,7 +90,6 @@ public class WebServiceUpload extends AsyncTask<Void, Integer, Void>{
 				
 				@Override
 				public void transferred(long num) {
-					// TODO Auto-generated method stub
 					publishProgress((int) ((num / (float) totalSize) * 100));
 				}
 			});
@@ -102,7 +102,6 @@ public class WebServiceUpload extends AsyncTask<Void, Integer, Void>{
 				try {
 					mEntity.addPart(strings.getKey(), new StringBody(strings.getValue()));
 				} catch (UnsupportedEncodingException e) {
-					// TODO Auto-generated catch block
 					exceptionMessage = "Invalid string parameter encoding";
 					catcher = e;
 					e.printStackTrace();
@@ -120,26 +119,23 @@ public class WebServiceUpload extends AsyncTask<Void, Integer, Void>{
 				responseString = EntityUtils.toString(entity);
 				
 			} catch (UnsupportedEncodingException e) {
-				// TODO Auto-generated catch block
 				catcher = e;
-				exceptionMessage = "Connetion Error";
+				exceptionMessage = "Connection Error";
 				e.printStackTrace();
 			} catch (ClientProtocolException e) {
-				// TODO Auto-generated catch block
-				exceptionMessage = "Connetion Error";
+				exceptionMessage = "Connection Error";
 				catcher = e;
 				e.printStackTrace();
 			} catch (UnknownHostException e){
-				exceptionMessage = "Connetion Error";
+				exceptionMessage = "Connection Error";
 				catcher = e;
 				e.printStackTrace();
 			} catch(ConnectTimeoutException e){
-				exceptionMessage = "Connetion Timeout";
+				exceptionMessage = "Connection Timeout";
 				catcher = e;
 				e.printStackTrace();
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				exceptionMessage = "Connetion Error";
+				exceptionMessage = "Connection Error";
 				catcher = e;
 				e.printStackTrace();
 			}
@@ -150,23 +146,25 @@ public class WebServiceUpload extends AsyncTask<Void, Integer, Void>{
 	
 	@Override
 	protected void onProgressUpdate(final Integer... values) {
-		// TODO Auto-generated method stub
 		if(getProgressDialog() != null){
-			new Handler().post(new Runnable() {
-				
-				@Override
-				public void run() {
-					// TODO Auto-generated method stub
-					getProgressDialog().setMessage(dialogMessage + "" + values[0] + "%");
-				}
-			});
+			getProgressDialog().setProgress(values[0]);
+//			new Handler().post(new Runnable() {
+//
+//				@Override
+//				public void run() {
+//					getProgressDialog().setMessage(dialogMessage + "" + values[0] + "%");
+//				}
+//			});
+		}
+
+		if(mProgressListener != null){
+			mProgressListener.onProgress(values[0]);
 		}
 	}
 	
 	
 	@Override
 	protected void onPostExecute(Void result) {
-		// TODO Auto-generated method stub
 		if(getProgressDialog() != null){
 			if(getProgressDialog().isShowing()){
 				getProgressDialog().dismiss();
@@ -225,6 +223,7 @@ public class WebServiceUpload extends AsyncTask<Void, Integer, Void>{
 	 */
 	public void setProgressDialog(String msg){
 		dlg = new ProgressDialog(context);
+		dlg.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
 		dlg.setMessage(msg);
 		dlg.setCancelable(false);
 		dialogMessage = msg;
@@ -272,6 +271,14 @@ public class WebServiceUpload extends AsyncTask<Void, Integer, Void>{
 	 */
 	public void setOnExceptionListener(onExceptionListener listener){
 		mExceptionListener = listener;
+	}
+
+	/**
+	 * sets the listener for upload progress
+	 * @param listener
+     */
+	public void setOnProgressUpdateListener(onProgressUpdateListener listener){
+		mProgressListener = listener;
 	}
 
 }

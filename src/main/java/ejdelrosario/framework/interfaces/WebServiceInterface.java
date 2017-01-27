@@ -21,4 +21,8 @@ public class WebServiceInterface {
 		void onException(Exception e, String message);
 	}
 
+	public interface onProgressUpdateListener{
+		void onProgress(int percent);
+	}
+
 }
