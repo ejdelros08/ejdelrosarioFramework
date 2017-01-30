@@ -80,7 +80,7 @@ public class DialogUtil {
 	 * @param listener for the buttons
 	 */
 	public static void showConfirmationDialog(Context context, String message, String buttonPositive, String buttonNegative, DialogInterface.OnClickListener listener){
-		showConfirmationDialog(context, null, message, buttonNegative, buttonNegative, listener);
+		showConfirmationDialog(context, null, message, buttonPositive, buttonNegative, listener);
 	}
 
 	/**
